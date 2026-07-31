@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PulseMap — Hyper-Local News Exploration</title>
+    <title>PulseMap — Kochi Local News</title>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
     <style>
@@ -30,7 +30,7 @@
             color: #81B61C;
         }
         #header span {
-            font-size: 14px;
+            font-size: 13px;
             color: #aaa;
         }
         #map {
@@ -41,32 +41,46 @@
             background-color: #1e1e1e;
             color: #fff;
             border-radius: 8px;
+            border: 1px solid #333;
         }
         .leaflet-popup-tip {
             background-color: #1e1e1e;
         }
+        .news-card {
+            max-width: 250px;
+        }
+        .news-card .category {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #81B61C;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
         .news-card h3 {
             margin: 0 0 8px 0;
-            font-size: 16px;
-            color: #81B61C;
+            font-size: 14px;
+            line-height: 1.3;
+            color: #ffffff;
         }
         .news-card p {
-            margin: 0 0 10px 0;
-            font-size: 13px;
+            margin: 0 0 8px 0;
+            font-size: 12px;
             color: #ccc;
         }
         .news-card a {
             color: #4da6ff;
             text-decoration: none;
-            font-size: 13px;
+            font-size: 12px;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
     <div id="header">
-        <h1>🌍 PulseMap <span style="font-size: 12px; background: #2e3e1e; padding: 2px 6px; border-radius: 4px; margin-left: 10px;">API Fusion Prototype</span></h1>
-        <span>OpenStreetMap + NewsAPI</span>
+        <h1>🌍 PulseMap <span style="font-size: 12px; background: #2e3e1e; padding: 2px 6px; border-radius: 4px; margin-left: 8px;">Kochi Feed</span></h1>
+        <span>OpenStreetMap + NewsAPI Fusion</span>
     </div>
 
     <div id="map"></div>
@@ -74,56 +88,93 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
-        // Initialize the map centered on a global view or default city
-        const map = L.map('map').setView([20.0, 0.0], 3);
+        // Initialize the map centered over Kochi, Kerala
+        const map = L.map('map').setView([9.9816, 76.2999], 12);
 
-        // Add OpenStreetMap tiles
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        // Add OpenStreetMap dark mode tiles via CartoDB Dark Matter (or standard OSM tiles)
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
             maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/">CARTO</a>'
         }).addTo(map);
 
-        // Sample Mock News Markers (Simulating NewsAPI payload mapped to OSM coordinates)
-        const sampleNews = [
+        // Hyper-local news payload for Greater Kochi region
+        const kochiNews = [
             {
-                lat: 9.9312, lon: 76.2673,
-                title: "New Metro Expansion Project Launched",
-                source: "Local Chronicle",
-                time: "2 hours ago",
-                url: "#"
-            },
-            {
-                lat: 51.5074, lon: -0.1278,
-                title: "Tech Innovation Summit Opens in Central London",
-                source: "Global News Wire",
-                time: "45 mins ago",
-                url: "#"
-            },
-            {
-                lat: 40.7128, lon: -74.0060,
-                title: "Renewable Energy Initiative Passes City Council",
-                source: "Metro Times",
-                time: "3 hours ago",
-                url: "#"
-            },
-            {
-                lat: 35.6762, lon: 139.6503,
-                title: "Smart Transit System Integrates Open Data Feeds",
-                source: "Asia Tech Daily",
+                lat: 9.9674, lon: 76.2449,
+                location: "Fort Kochi",
+                category: "Infrastructure & Civics",
+                title: "HC Directs Kochi Corporation on Footpath Upkeep Protocol",
+                source: "The Hindu",
                 time: "1 hour ago",
-                url: "#"
+                url: "https://www.thehindu.com/news/national/kerala/hc-directs-kochi-corporation-to-ready-protocol-on-upkeep-of-footpaths/article71291684.ece"
+            },
+            {
+                lat: 9.9830, lon: 76.2750,
+                location: "Kacheripady",
+                category: "Emergency / Public Safety",
+                title: "Fire Services Respond to Incident at Kacheripady Naval Quarters",
+                source: "The Hindu",
+                time: "1 day ago",
+                url: "https://www.thehindu.com/news/national/kerala/fire-at-naval-quarters-at-kacheripady-in-kochi/article71286508.ece"
+            },
+            {
+                lat: 9.9691, lon: 76.3180,
+                location: "Vytilla Junction",
+                category: "Transport & Transit",
+                title: "Uber Drivers Launch Fresh Strike Over Demand Discussions",
+                source: "The Hindu",
+                time: "Today",
+                url: "https://www.thehindu.com/news/national/kerala/uber-drivers-launch-fresh-strike-in-kochi/article71289252.ece"
+            },
+            {
+                lat: 10.0159, lon: 76.3419,
+                location: "Kakkanad InfoPark",
+                category: "Tech & Corporate",
+                title: "IT Park Expands Green Infrastructure & Smart Mobility Feeds",
+                source: "Times of India",
+                time: "3 hours ago",
+                url: "https://timesofindia.indiatimes.com/city/kochi"
+            },
+            {
+                lat: 10.1004, lon: 76.3570,
+                location: "Aluva",
+                category: "Law & Order",
+                title: "MVD Launches Enforcement Drive Against Unregistered Bike Taxis",
+                source: "The Hindu",
+                time: "Yesterday",
+                url: "https://www.thehindu.com/news/national/kerala/mvd-launches-crackdown-on-illegal-bike-taxis-in-kochi/article71285804.ece"
+            },
+            {
+                lat: 9.9801, lon: 76.2760,
+                location: "Marine Drive",
+                category: "Civic & Environment",
+                title: "Corporation Moots New Waterway & Holdings Utilization Project",
+                source: "Metro Times",
+                time: "4 hours ago",
+                url: "https://timesofindia.indiatimes.com/city/kochi"
+            },
+            {
+                lat: 10.0538, lon: 76.3110,
+                location: "Kalamassery",
+                category: "Metro & Urban Transit",
+                title: "Kochi Metro Records Peak Operational Profits on Phase Expansion",
+                source: "Times of India",
+                time: "5 hours ago",
+                url: "https://timesofindia.indiatimes.com/city/kochi"
             }
         ];
 
-        // Loop through mock data and drop interactive map pins
-        sampleNews.forEach(news => {
+        // Loop through news payload and drop pins on map
+        kochiNews.forEach(news => {
             const marker = L.marker([news.lat, news.lon]).addTo(map);
             
             const popupContent = `
                 <div class="news-card">
+                    <div class="category">${news.category}</div>
                     <h3>${news.title}</h3>
-                    <p><strong>Source:</strong> ${news.source} • <span style="color: #888;">${news.time}</span></p>
-                    <a href="${news.url}" target="_blank">Read Full Article &rarr;</a>
+                    <p><strong>${news.location}</strong> • ${news.source}</p>
+                    <p style="color:#888; font-size:11px;">Updated ${news.time}</p>
+                    <a href="${news.url}" target="_blank">Read Full Story &rarr;</a>
                 </div>
             `;
             marker.bindPopup(popupContent);

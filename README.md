@@ -1,5 +1,6 @@
 # PulseMap-API-Fusion
-Hey, This is my submission for the API fusion contest. Hope you find it interesting.
+Hey, This is my submission for the API fusion contest.Do checkout the Live demo provided.
+Hope you find it interesting.
 # 🌍 PulseMap — See the World's News, Where It Happens
 
 PulseMap is an interactive hyper-local news visualizer built for the API Fusion Ideathon. It dynamically combines **OpenStreetMap** and **NewsAPI** to map breaking news stories onto an interactive geographic canvas.

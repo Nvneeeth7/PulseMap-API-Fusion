@@ -1,5 +1,6 @@
 # PulseMap-API-Fusion
-Hey, This is my submission for the API fusion contest.Do checkout the Live demo provided.
+Hey, This is my submission for the API fusion contest.
+Do checkout the Live demo provided.
 Hope you find it interesting.
 # 🌍 PulseMap — See the World's News, Where It Happens
 

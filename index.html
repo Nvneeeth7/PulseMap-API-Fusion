@@ -1,1 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PulseMap — Hyper-Local News Exploration</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+        }
+        #header {
+            height: 60px;
+            background-color: #1e1e1e;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 1px solid #333;
+        }
+        #header h1 {
+            font-size: 20px;
+            margin: 0;
+            color: #81B61C;
+        }
+        #header span {
+            font-size: 14px;
+            color: #aaa;
+        }
+        #map {
+            height: calc(100vh - 60px);
+            width: 100%;
+        }
+        .leaflet-popup-content-wrapper {
+            background-color: #1e1e1e;
+            color: #fff;
+            border-radius: 8px;
+        }
+        .leaflet-popup-tip {
+            background-color: #1e1e1e;
+        }
+        .news-card h3 {
+            margin: 0 0 8px 0;
+            font-size: 16px;
+            color: #81B61C;
+        }
+        .news-card p {
+            margin: 0 0 10px 0;
+            font-size: 13px;
+            color: #ccc;
+        }
+        .news-card a {
+            color: #4da6ff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
 
+    <div id="header">
+        <h1>🌍 PulseMap <span style="font-size: 12px; background: #2e3e1e; padding: 2px 6px; border-radius: 4px; margin-left: 10px;">API Fusion Prototype</span></h1>
+        <span>OpenStreetMap + NewsAPI</span>
+    </div>
+
+    <div id="map"></div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script>
+        // Initialize the map centered on a global view or default city
+        const map = L.map('map').setView([20.0, 0.0], 3);
+
+        // Add OpenStreetMap tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 19,
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Sample Mock News Markers (Simulating NewsAPI payload mapped to OSM coordinates)
+        const sampleNews = [
+            {
+                lat: 9.9312, lon: 76.2673,
+                title: "New Metro Expansion Project Launched",
+                source: "Local Chronicle",
+                time: "2 hours ago",
+                url: "#"
+            },
+            {
+                lat: 51.5074, lon: -0.1278,
+                title: "Tech Innovation Summit Opens in Central London",
+                source: "Global News Wire",
+                time: "45 mins ago",
+                url: "#"
+            },
+            {
+                lat: 40.7128, lon: -74.0060,
+                title: "Renewable Energy Initiative Passes City Council",
+                source: "Metro Times",
+                time: "3 hours ago",
+                url: "#"
+            },
+            {
+                lat: 35.6762, lon: 139.6503,
+                title: "Smart Transit System Integrates Open Data Feeds",
+                source: "Asia Tech Daily",
+                time: "1 hour ago",
+                url: "#"
+            }
+        ];
+
+        // Loop through mock data and drop interactive map pins
+        sampleNews.forEach(news => {
+            const marker = L.marker([news.lat, news.lon]).addTo(map);
+            
+            const popupContent = `
+                <div class="news-card">
+                    <h3>${news.title}</h3>
+                    <p><strong>Source:</strong> ${news.source} • <span style="color: #888;">${news.time}</span></p>
+                    <a href="${news.url}" target="_blank">Read Full Article &rarr;</a>
+                </div>
+            `;
+            marker.bindPopup(popupContent);
+        });
+    </script>
+</body>
+</html>
